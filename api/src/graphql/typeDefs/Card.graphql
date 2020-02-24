@@ -8,11 +8,12 @@ type Query {
 type Card {
   id: ID!
   description: String!
+  color: String!
   createdAt: Date!  
 }
 
 type Mutation {
-  createCard(description: String!): Card
+  createCard(description: String!, color:String!): Card!
   deleteCard(id: ID!): Card
 }
 

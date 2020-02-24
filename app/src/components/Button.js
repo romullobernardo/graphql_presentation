@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { px, direction, alignment, color, font } from '../styles'
+import { px, direction, alignment, setColor } from '../styles'
 import check from '../Images/check.svg'
 import wrong from '../Images/wrong.svg'
 
 
-export default ({ type }) => {
+export default ({ type, onClick }) => {
   return (
-    <Button>
+    <Button onClick={onClick}>
       <Inner type={type}>
         { type === 'check' ? <Image src={check} /> : <Image src={wrong} /> }
       </Inner>
@@ -19,12 +19,12 @@ const Button = styled.div`
   width: ${px(30)};
   height: ${px(30)};
   border-radius: 100%;
-  box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${color.shadow1}, ${px(3)} ${px(3)} ${px(5)} ${color.shadow2};
+  box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${setColor.shadow1}, ${px(3)} ${px(3)} ${px(5)} ${setColor.shadow2};
   ${direction()};
   ${alignment()};
 
   &:hover {
-    box-shadow: ${px(-1)} ${px(-1)} ${px(5)} ${color.shadow1}, ${px(1)} ${px(1)} ${px(3)} ${color.shadow2};
+    box-shadow: ${px(-1)} ${px(-1)} ${px(5)} ${setColor.shadow1}, ${px(1)} ${px(1)} ${px(3)} ${setColor.shadow2};
   }
 `
 const Inner = styled.div`

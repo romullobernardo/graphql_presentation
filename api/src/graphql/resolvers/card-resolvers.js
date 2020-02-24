@@ -7,8 +7,8 @@ export default {
   },
 
   Mutation: {
-    createCard: (parent, { description }) => {
-      const card = Card({ description })
+    createCard: (parent, { description, color }) => {
+      const card = Card({ description, color })
       return card.save()
     },
 

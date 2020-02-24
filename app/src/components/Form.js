@@ -1,20 +1,87 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
-import { px, direction, alignment, color, scroll } from '../styles'
+import { px, direction, alignment, setColor, fonts } from '../styles'
+import { useMutation } from '@apollo/react-hooks'
+import gql from 'graphql-tag'
+import { GET_CARDS } from '../App'
+
+
+const CREATE_CARD = gql`
+  mutation createCard($description: String!, $color: String!) {
+    createCard(description: $description, color: $color) {
+      description
+    }
+  }
+`
 
 export default () => {
+  const [description, setDescription] = useState('')
+
+  const [createCard] = useMutation(CREATE_CARD)
+
+  const submitForm = e => {
+    e.preventDefault()
+
+    createCard({ variables: { description, color:'blue' }, refetchQueries: [{ query: GET_CARDS }] })
+    .catch((res) => 
+    {
+      const errors = res.graphQLErrors.map(error => error.message)
+      alert(errors)
+    })
+
+    setDescription('')
+  }
+
   return (
-    <Form>
-      
-    </Form>
+    <Wrapper>
+      <Title> CREATE A CARD </Title>
+      <Form onSubmit={submitForm}>
+        <Input onChange={e => setDescription(e.target.value)} value={description} />
+        <Button type='submit'> Send </Button>
+      </Form>
+    </Wrapper>
   )
 }
 
-const Form = styled.div`
-  min-height: ${px(300)};
-  width: ${px(440)};
-  border-radius: ${px(5)};
-  box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${color.shadow1}, inset ${px(3)} ${px(3)} ${px(5)} ${color.shadow2};
-  ${direction()};
+
+const Wrapper = styled.div`
+  ${direction('column')};
   ${alignment()};
+`
+
+const Form = styled.form`
+  min-height: ${px(100)};
+  width: ${px(420)};
+  border-radius: ${px(5)};
+  padding: ${px(30)};
+  box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${setColor.shadow1}, ${px(3)} ${px(3)} ${px(5)} ${setColor.shadow2};
+  ${direction('column')};
+  ${alignment({ main:'space-between' })};
+`
+
+const Input = styled.input`
+  width: ${px(300)};
+  height: ${px(40)};
+  box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${setColor.shadow1}, inset ${px(3)} ${px(3)} ${px(5)} ${setColor.shadow2};
+  background-color: ${setColor.main};
+  margin-bottom: ${px(30)};
+  border-radius: ${px(5)};
+  padding-left: ${px(15)};
+  ${fonts({ color:'purple', font:'oswald' })};
+`
+
+const Button = styled.button`
+  width: ${px(100)};
+  height: ${px(40)};
+  background-color: ${setColor.blue};
+  color: ${setColor.main};
+  border: 1px solid ${setColor.purple};
+  ${fonts({ color:'white', font:'oswald' })};
+  border-radius: ${px(5)};
+`
+
+const Title = styled.h3`
+  ${fonts({ font:'courgette', size:26, weight:'bold', color:'blue' })};
+  margin-bottom: ${px(15)};
+  text-shadow: ${px(-1)} 0 ${setColor.purple}, 0 ${px(1)} ${setColor.purple}, ${px(1)} 0 ${setColor.purple}, 0 ${px(-1)} ${setColor.purple};
 `

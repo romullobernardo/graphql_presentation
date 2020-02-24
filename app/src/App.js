@@ -1,99 +1,51 @@
-import React, {useState} from 'react'
-import Paper from '@material-ui/core/Paper'
+import React from 'react'
 import styled from 'styled-components'
-import ButtonBase from '@material-ui/core/ButtonBase'
-import { useQuery, useMutation } from '@apollo/react-hooks'
-import { direction, alignment, px } from './styles'
+import { direction, alignment } from './styles'
+import List from './components/List'
+import Form from './components/Form'
+import Card from './components/Card'
 import gql from 'graphql-tag'
-import TextInput from './components/TextInput'
+import { useQuery } from '@apollo/react-hooks'
 
-
-const GET_CARDS = gql`
+export const GET_CARDS = gql`
   query GetData {
     cards {
       description
-    }
-  }
-`
-
-const CREATE_CARD = gql`
-  mutation createCard($description: String!) {
-    createCard(description: $description) {
-      description
+      id
+      color
     }
   }
 `
 
 export default () => {
-  const [description, setDescription] = useState('')
-  const [createCard] = useMutation(CREATE_CARD)
-
   const { error, data } = useQuery(GET_CARDS)
   error && console.log(error)
-
-  const submitForm = e => {
-    e.preventDefault()
-
-    createCard({ variables: { description }, refetchQueries: [{ query: GET_CARDS }] })
-    .catch((res) => 
-    {
-      const errors = res.graphQLErrors.map(error => error.message)
-      alert(errors)
-    })
-  }
+  // data && console.log(data[])
 
   return (
-    <div>
-      {
-        data && data.cards.map((card, i) => 
-          <SPaper key={i}>
-            {card.description}
-          </SPaper>
-        )
-      }
+    <Wrapper>
+      <List>
+        {data && data.cards.map((card, i) => 
+          <Card 
+            key={i} 
+            id={card.id}
+            color={card.color}
+          > 
+            {card.description} 
+          </Card>) 
+        }
+      </List>
+      <Form>
 
-      <Box onSubmit={submitForm}>
-        <Form>
-          <TextInput 
-            label='Description' 
-            type='text' 
-            onChange={e => setDescription(e.target.value)}
-          />
-          <Button type='submit'> Send </Button>
-        </Form>
-      </Box>
-    </div>
+      </Form>
+    </Wrapper>
   )
 }
 
-const SPaper = styled(Paper)`
-  width: ${px(300)};
-  height: ${px(100)};
-  margin-bottom: ${px(15)};
-
+const Wrapper = styled.div`
+  height: 100vh;
+  width: 100vw;
   ${direction()};
   ${alignment()};
 `
 
-const Box = styled(Paper)`
-  width: ${px(300)};
-  height: ${px(300)};
-
-  ${direction()};
-  ${alignment()};
-`
-
-const Form = styled.form`
-  width: 100%;
-`
-
-const Button = styled(ButtonBase)`
-  width: 100%;
-  height: ${px(50)};
-  margin-top: ${px(45)} !important;
-
-  font-size: ${px(23)} !important;
-
-  box-shadow: ${px(-4)} ${px(6)} ${px(28)} rgba(0,0,0,0.27);
-  border-radius: ${px(3)} !important;
-`
