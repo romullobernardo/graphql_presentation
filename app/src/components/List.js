@@ -16,16 +16,17 @@ export default ({ children }) => {
 
 const Outer = styled.div`
   min-height: ${px(550)};
-  width: ${px(400)};
+  width: ${px(440)};
   border-radius: ${px(5)};
   box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${color.shadow1}, ${px(3)} ${px(3)} ${px(5)} ${color.shadow2};
   ${direction()};
   ${alignment()};
+  margin-right: ${px(50)};
 `
 
 const Inner = styled.div`
   height: ${px(530)};
-  width: ${px(380)};
+  width: ${px(420)};
   border-radius: ${px(5)};
   box-shadow: ${px(-3)} ${px(-3)} ${px(7)} ${color.shadow1}, inset ${px(3)} ${px(3)} ${px(5)} ${color.shadow2};
   ${direction()};
@@ -36,7 +37,7 @@ const Container = styled.div`
   margin-top: ${px(7)};
   padding-top: ${px(7)};
   height: ${px(520)};
-  width: ${px(365)};
+  width: ${px(405)};
   ${direction('column')};
   ${alignment({ main:'flex-start' })};
   ${scroll};

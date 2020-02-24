@@ -8,7 +8,7 @@ const alignment = ({ main = 'center', cross = 'center' } = {}) =>
 const px = n => `${(n * 100) / 1440}vw`
 
 const font = ({ weight = 'normal', size = 17 } = {}) =>
-  `font-size: ${px(size)}; font-weight: ${weight};`
+  `font-size: ${px(size)}; font-weight: ${weight} font-family: 'Lato'; `
 
 const color = {
   main: '#dde1e7',

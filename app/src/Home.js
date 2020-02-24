@@ -1,21 +1,34 @@
-import React from 'react'
+import React, {useState} from 'react'
 import styled from 'styled-components'
 import { direction, alignment } from './styles'
-import Container from './components/Container'
+import List from './components/List'
+import Form from './components/Form'
 import Card from './components/Card'
+import gql from 'graphql-tag'
+import { useQuery, useMutation } from '@apollo/react-hooks'
+
+const GET_CARDS = gql`
+  query GetData {
+    cards {
+      description
+    }
+  }
+`
 
 export default () => {
+  const [description, setDescription] = useState('')
+
+  const { error, data } = useQuery(GET_CARDS)
+  error && console.log(error)
+
   return (
     <Wrapper>
+      <List>
+        { data && data.cards.map((card, i) => <Card key={i}> {card.description} </Card>) }
+      </List>
+      <Form>
 
-      <Container>
-
-        {
-          [0,1,2,3,4,5,6,7,8,9,10].map((card, i) => <Card key={i}> {card} </Card>)
-        }
-
-      </Container>
-      
+      </Form>
     </Wrapper>
   )
 }
